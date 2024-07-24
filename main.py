@@ -1,9 +1,7 @@
 from flask import Flask, request, redirect, make_response, url_for, session, render_template, jsonify
 import os
-from flask_cors import CORS
 
 app = Flask('GrapevineHealth')
-CORS(app)
 
 ### TAGS: testimonials, diabetes, heart (dropdown menu)
 ### SEARCH BAR TO FILTER
@@ -42,4 +40,4 @@ def search():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8888, debug=True)
+    app.run(host='0.0.0.0', port=5555, debug=True)
