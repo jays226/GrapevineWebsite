@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grapevine Health</title>
+    <style>
+        @font-face{
+            font-family: 'Metropolis-bold';
+            src: url('fonts/metropolis/Metropolis-Bold.otf') format('otf');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Metropolis';
+            src: url('fonts/metropolis/Metropolis-Regular.otf') format('otf');
+            font-weight: normal;
+            font-style: normal;
+        }
+        h2 {
+            display: flex;
+            justify-content: center;
+        }
+        body {
+            font-family: 'Helvetica', 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #F0F4F8;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background-color: #591C58;
+            padding: 1.5vh 0;
+            position: fixed;
+            width: 100%;
+            height: 7.5vh;
+            top: 0;
+            z-index: 1000;
+        }
+        .navbar a {
+            text-decoration: none;
+            color: #FFFFFF;
+            font-size: 2.5vw;
+            padding: 0.8vh 2vw;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+        .navbar a.active, .navbar a:hover {
+            background-color: #3AC2C8;
+            color: #FFFFFF;
+        }
+        .content {
+            padding-top: 60px; /* To avoid content being hidden behind the navbar */
+        }
+        .tab-content {
+            display: none;
+            padding: 20px;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 0 10px;
+        }
+
+        .search-bar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px auto;
+            max-width: 600px;
+        }
+
+        .search-bar input[type="text"] {
+            width: 100%;
+            padding: 10px 50px 10px 20px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            font-size: 16px;
+            outline: none;
+            font-family: 'Helvetica', 'Arial', sans-serif;
+        }
+
+        .video-block {
+            max-width: 600px;
+            margin: 20px auto;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+            font-family: Arial, sans-serif;
+            position: relative;
+        }
+
+        .video-header {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .video-header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .video-header .username {
+            font-weight: bold;
+        }
+
+        .video-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background-color: black;
+        }
+
+        .video-container video {
+            width: 100%;
+            height: auto;
+        }
+
+        .video-footer {
+            padding: 10px;
+            border-top: 1px solid #ddd;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .video-footer .description {
+            margin: 10px 0;
+            margin-top: 5px;
+            font-size: 2vh;
+            line-height: 1.5;
+        }
+
+        .video-footer .actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .video-footer .actions .like,
+        .video-footer .actions .share {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .video-footer .actions .like:hover,
+        .video-footer .actions .share:hover {
+            color: #007BFF;
+        }
+
+        .video-footer .actions .like {
+            color: #e0245e; /* Instagram-like pink color */
+        }
+
+        .video-footer .actions .share {
+            margin-left: 15px;
+            color: #0099ff; /* Instagram-like blue color */
+        }
+
+        .video-footer .actions svg {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+        }
+
+        .video-footer .actions .like svg {
+            color: #e0245e;
+        }
+
+        .video-footer .actions .share svg {
+            color: #0099ff;
+        }
+
+        @media (max-width: 768px) {
+            .navbar a {
+                font-size: 5vw;
+                padding: 2vw 3vw;
+            }
+            .video-block {
+                margin: 10px auto;
+            }
+            .video-footer .actions .like,
+            .video-footer .actions .share {
+                font-size: 3vw;
+            }
+        }
+        @media (max-width: 480px) {
+            .navbar a {
+                font-size: 6vw;
+                padding: 3vw 4vw;
+            }
+            .video-header img {
+                width: 30px;
+                height: 30px;
+            }
+            .video-footer .actions .like,
+            .video-footer .actions .share {
+                font-size: 4vw;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a href="#tab1" class="active" onclick="openTab(event, 'tab1')">Inbox</a>
+        <a href="#tab2" onclick="openTab(event, 'tab2')">Library</a>
+        <a href="#tab3" onclick="openTab(event, 'tab3')">Saved</a>
+        <a href="#tab4" onclick="openTab(event, 'tab4')">Chat</a>
+    </div>
+
+    <div class="content">
+        <div id="tab1" class="tab-content active">
+            <h2>Inbox</h2>
+            
+        </div>
+        
+        <div id="tab2" class="tab-content">
+            <div class="search-bar">
+                <input type="text" placeholder="Search..." aria-label="Search">
+            </div>
+            <div id="video-blocks-container">
+                {% for video in videos %}
+                <div class="video-block" data-title="{{ video.title }}">
+                    <div class="video-header">
+                        <img src="{{ url_for('static', filename='img/grapevine_logo.jpg') }}" alt="Grapevine Health">
+                        <span class="username">Grapevine Health</span>
+                    </div>
+                    <div class="video-container">
+                        <video controls>
+                            <source src="{{ url_for('static', filename=video.video_path) }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <div class="video-footer">
+                        <div class="description">
+                            {{ video.title }}
+                        </div>
+                        <div class="actions">
+                            <span class="like">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-heart"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg>
+                                Save
+                            </span>
+                            <span class="share">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-share-2"><path d="M17 10l4-4m0 0l-4-4m4 4H3m14 14l4-4m0 0l-4-4m4 4H3"></path></svg>
+                                Share
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+
+        <div id="tab3" class="tab-content">
+            <h2>Tab 3 Content</h2>
+            <p>This is the content for tab 2.</p>
+        </div>
+            
+        </div>
+        <div id="tab4" class="tab-content">
+            <h2>Tab 4 Content</h2>
+            <p>This is the content for tab 4.</p>
+        </div>
+    </div>
+    <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const searchInput = document.querySelector('.search-bar input');
+                const videoBlocks = document.querySelectorAll('.video-block');
+
+                searchInput.addEventListener('input', function() {
+                    const query = searchInput.value.toLowerCase();
+
+                    videoBlocks.forEach(function(block) {
+                        const title = block.getAttribute('data-title').toLowerCase();
+
+                        if (title.includes(query)) {
+                            block.style.display = '';
+                        } else {
+                            block.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+            function openTab(event, tabName) {
+                var i, tabcontent, tablinks;
+                tabcontent = document.getElementsByClassName("tab-content");
+                for (i = 0; i < tabcontent.length; i++) {
+                    tabcontent[i].style.display = "none";
+                    tabcontent[i].classList.remove("active");
+                }
+                tablinks = document.querySelectorAll(".navbar a");
+                for (i = 0; i < tablinks.length; i++) {
+                    tablinks[i].classList.remove("active");
+                }
+                document.getElementById(tabName).style.display = "block";
+                document.getElementById(tabName).classList.add("active");
+                event.currentTarget.classList.add("active");
+            }
+    </script>
+</body>
+</html>
